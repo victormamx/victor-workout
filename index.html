@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Victor Mac Workout">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <title>Victor Mac Workout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --surface2: #1c1c1c;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0ede8;
+      --muted: rgba(240,237,232,0.45);
+      --chest: #e8503a;
+      --back: #4caf7d;
+      --legs: #7c6de8;
+      --biceps: #4aa8e8;
+      --shoulders: #e87c9a;
+      --triceps: #e8a84c;
+      --rest: #444;
+      --accent: #e8503a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overscroll-behavior: none;
+    }
+
+    /* SPLASH / HOME */
+    #splash {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      padding: env(safe-area-inset-top, 20px) 24px env(safe-area-inset-bottom, 20px);
+    }
+
+    .splash-header {
+      padding-top: 48px;
+      margin-bottom: 40px;
+    }
+
+    .splash-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .splash-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      line-height: 0.95;
+      color: var(--text);
+    }
+
+    .splash-title span { color: var(--accent); }
+
+    .week-strip {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 32px;
+    }
+
+    .week-dot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .week-dot-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      border: 1.5px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .week-dot:active .week-dot-circle { transform: scale(0.92); }
+
+    .week-dot-label {
+      font-size: 9px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .day-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .day-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .day-card:active { transform: scale(0.98); }
+
+    .day-card-header {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      gap: 12px;
+    }
+
+    .day-color-bar {
+      width: 4px;
+      height: 36px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .day-card-info { flex: 1; }
+
+    .day-card-day {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 2px;
+    }
+
+    .day-card-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+
+    .day-card-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .day-card-arrow {
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    /* DETAIL VIEW */
+    #detail {
+      display: none;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      flex-direction: column;
+    }
+
+    #detail.active { display: flex; }
+
+    .detail-hero {
+      padding: env(safe-area-inset-top, 44px) 24px 24px;
+      position: relative;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      margin-bottom: 20px;
+      padding: 6px 0;
+    }
+
+    .back-btn:active { opacity: 0.6; }
+
+    .detail-day-label {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .detail-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      line-height: 0.95;
+      margin-bottom: 8px;
+    }
+
+    .detail-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .detail-body {
+      flex: 1;
+      padding: 0 16px env(safe-area-inset-bottom, 24px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .section-title {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 20px 0 10px;
+      padding: 0 8px;
+    }
+
+    /* WARMUP CARD */
+    .warmup-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 4px;
+    }
+
+    .warmup-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(232,80,58,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .warmup-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .warmup-text span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* EXERCISE LIST */
+    .exercise-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .exercise-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .exercise-item.done {
+      opacity: 0.45;
+    }
+
+    .exercise-item.done::after {
+      content: '✓';
+      position: absolute;
+      right: 16px;
+      font-size: 16px;
+      color: #4caf7d;
+    }
+
+    .ex-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--muted);
+      width: 28px;
+      text-align: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .ex-info { flex: 1; }
+
+    .ex-name {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+
+    .ex-sets {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* HIIT SECTION */
+    .hiit-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .hiit-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hiit-header strong {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .hiit-badge {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(232,80,58,0.15);
+      color: var(--accent);
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .hiit-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .hiit-row:last-child { border-bottom: none; }
+
+    .hiit-timing {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .hiit-note {
+      padding: 10px 16px;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* REST DAY */
+    .rest-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 24px;
+      text-align: center;
+      margin: 16px 0;
+    }
+
+    .rest-emoji { font-size: 48px; margin-bottom: 16px; }
+
+    .rest-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .rest-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* PROGRESS BAR */
+    .progress-bar-wrap {
+      margin: 16px 0 4px;
+      padding: 0 8px;
+    }
+
+    .progress-bar-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .progress-bar-bg {
+      height: 4px;
+      background: var(--surface2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* RULES STRIP */
+    .rules-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .rule-pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .rule-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+
+    .rule-lbl {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ANIMATIONS */
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .animate-in {
+      animation: slideUp 0.35s ease forwards;
+    }
+
+    .animate-in:nth-child(1) { animation-delay: 0.05s; opacity: 0; }
+    .animate-in:nth-child(2) { animation-delay: 0.1s; opacity: 0; }
+    .animate-in:nth-child(3) { animation-delay: 0.15s; opacity: 0; }
+    .animate-in:nth-child(4) { animation-delay: 0.2s; opacity: 0; }
+    .animate-in:nth-child(5) { animation-delay: 0.25s; opacity: 0; }
+    .animate-in:nth-child(6) { animation-delay: 0.3s; opacity: 0; }
+    .animate-in:nth-child(7) { animation-delay: 0.35s; opacity: 0; }
+  </style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="splash">
+  <div class="splash-header">
+    <div class="splash-label">Training Plan</div>
+    <div class="splash-title">Victor Mac<br><span>Workout</span></div>
+  </div>
+
+  <div class="week-strip" id="weekStrip"></div>
+
+  <div class="day-cards" id="dayCards"></div>
+</div>
+
+<!-- DETAIL -->
+<div id="detail">
+  <div class="detail-hero" id="detailHero">
+    <div class="back-btn" onclick="goHome()">← Back</div>
+    <div class="detail-day-label" id="detailDayLabel"></div>
+    <div class="detail-title" id="detailTitle"></div>
+    <div class="detail-subtitle" id="detailSubtitle"></div>
+  </div>
+  <div class="detail-body" id="detailBody"></div>
+</div>
+
+<script>
+const DAYS = [
+  {
+    day: 'Monday',
+    short: 'Mon',
+    muscle: 'Chest',
+    color: '#e8503a',
+    colorKey: 'chest',
+    subtitle: '30 min cardio · Weights · Full-body HIIT',
+    exercises: [
+      { name: 'Dumbbell flat press', sets: '4 × 18–20' },
+      { name: 'Incline dumbbell press', sets: '4 × 18–20' },
+      { name: 'Cable fly (low to high)', sets: '4 × 20' },
+      { name: 'Push-up — slow tempo 3-1-1', sets: '4 × 20+' },
+      { name: 'Chest dip — bodyweight, controlled', sets: '4 × 15–20' },
+    ],
+    hiit: {
+      duration: '20 min · 3 rounds',
+      moves: [
+        { name: 'Burpee', timing: '40s on / 20s off' },
+        { name: 'Mountain climbers', timing: '40s on / 20s off' },
+        { name: 'Jump squat', timing: '30s on / 30s off' },
+        { name: 'Plank to shoulder tap', timing: '40s on / 20s off' },
+        { name: 'Bicycle crunch', timing: '40s on / 20s off' },
+      ],
+      note: '3 rounds · 60s rest between rounds'
+    }
+  },
+  {
+    day: 'Tuesday',
+    short: 'Tue',
+    muscle: 'Back',
+    color: '#4caf7d',
+    colorKey: 'back',
+    subtitle: '30 min cardio · Weights · Full-body HIIT',
+    exercises: [
+      { name: 'Lat pulldown (wide grip)', sets: '4 × 18–20' },
+      { name: 'Seated cable row (close grip)', sets: '4 × 18–20' },
+      { name: 'Single-arm dumbbell row', sets: '4 × 18–20 each' },
+      { name: 'Straight-arm cable pulldown', sets: '4 × 20' },
+      { name: 'Face pull (cable rope)', sets: '4 × 20' },
+      { name: 'Hyperextension (bodyweight or light plate)', sets: '4 × 20' },
+    ],
+    hiit: {
+      duration: '20 min · 3 rounds',
+      moves: [
+        { name: 'Renegade row (light DBs)', timing: '10 reps / 20s rest' },
+        { name: 'Plank weighted hold', timing: '45s on / 15s off' },
+        { name: 'Box jump or broad jump', timing: '30s on / 30s off' },
+        { name: 'Russian twist', timing: '40s on / 20s off' },
+        { name: 'Burpee', timing: '30s on / 30s off' },
+      ],
+      note: '3 rounds · 60s rest between rounds'
+    }
+  },
+  {
+    day: 'Wednesday',
+    short: 'Wed',
+    muscle: 'Legs',
+    color: '#7c6de8',
+    colorKey: 'legs',
+    subtitle: 'Incline walk · Weights · HIIT',
+    warmupNote: '30 min incline walk only — save the legs',
+    exercises: [
+      { name: 'Goblet squat (dumbbell)', sets: '4 × 20' },
+      { name: 'Leg press', sets: '4 × 20' },
+      { name: 'Walking lunge (dumbbell)', sets: '4 × 20 steps' },
+      { name: 'Romanian deadlift — light, controlled', sets: '4 × 18–20' },
+      { name: 'Leg curl (seated or lying)', sets: '4 × 20' },
+      { name: 'Leg extension', sets: '4 × 20' },
+      { name: 'Standing calf raise', sets: '4 × 25–30' },
+    ],
+    hiit: {
+      duration: '15 min · 2–3 rounds',
+      moves: [
+        { name: 'Jump squat', timing: '30s on / 30s off' },
+        { name: 'Reverse crunch', timing: '40s on / 20s off' },
+        { name: 'Lateral bound', timing: '30s on / 30s off' },
+        { name: 'Dead bug', timing: '40s on / 20s off' },
+      ],
+      note: '2–3 rounds · listen to your body'
+    }
+  },
+  {
+    day: 'Thursday',
+    short: 'Thu',
+    muscle: 'Biceps',
+    color: '#4aa8e8',
+    colorKey: 'biceps',
+    subtitle: '30 min cardio · Weights · Full-body HIIT',
+    exercises: [
+      { name: 'EZ bar curl (standing)', sets: '4 × 18–20' },
+      { name: 'Incline dumbbell curl', sets: '4 × 18–20' },
+      { name: 'Hammer curl', sets: '4 × 20' },
+      { name: 'Cable rope curl (supinated)', sets: '4 × 20' },
+      { name: '21s — EZ bar (7 bottom / 7 top / 7 full)', sets: '4 rounds' },
+    ],
+    hiit: {
+      duration: '20 min · 3 rounds',
+      moves: [
+        { name: 'Hollow body hold', timing: '30s on / 15s off' },
+        { name: 'Jump lunge', timing: '40s on / 20s off' },
+        { name: 'Ab wheel rollout', timing: '10 reps / 20s rest' },
+        { name: 'High knees', timing: '40s on / 20s off' },
+        { name: 'V-up', timing: '30s on / 15s off' },
+      ],
+      note: '3 rounds · 60s rest between rounds'
+    }
+  },
+  {
+    day: 'Friday',
+    short: 'Fri',
+    muscle: 'Shoulders',
+    color: '#e87c9a',
+    colorKey: 'shoulders',
+    subtitle: '30 min cardio · Weights · Full-body HIIT',
+    exercises: [
+      { name: 'Dumbbell overhead press (seated)', sets: '4 × 18–20' },
+      { name: 'Lateral raise (dumbbell)', sets: '4 × 20' },
+      { name: 'Front raise (plate or DB)', sets: '4 × 18–20' },
+      { name: 'Rear delt fly (cable or bent-over DB)', sets: '4 × 20' },
+      { name: 'Arnold press', sets: '4 × 15–18' },
+      { name: 'Cable upright row', sets: '4 × 20' },
+    ],
+    hiit: {
+      duration: '20 min · 3 rounds',
+      moves: [
+        { name: 'Dumbbell thruster (light)', timing: '12 reps / 30s rest' },
+        { name: 'Mountain climbers', timing: '40s on / 20s off' },
+        { name: 'Push-up to pike', timing: '40s on / 20s off' },
+        { name: 'Bicycle crunch', timing: '40s on / 20s off' },
+        { name: 'Lateral shuffle + touch', timing: '30s on / 30s off' },
+      ],
+      note: '3 rounds · 60s rest between rounds'
+    }
+  },
+  {
+    day: 'Saturday',
+    short: 'Sat',
+    muscle: 'Triceps',
+    color: '#e8a84c',
+    colorKey: 'triceps',
+    subtitle: '30 min cardio · Weights · Full-body HIIT',
+    exercises: [
+      { name: 'Cable pushdown (rope)', sets: '4 × 20' },
+      { name: 'Overhead cable extension (rope)', sets: '4 × 18–20' },
+      { name: 'Dumbbell overhead extension', sets: '4 × 18–20' },
+      { name: 'Bench dip (bodyweight)', sets: '4 × 20' },
+      { name: 'Close-grip push-up (slow)', sets: '4 × 20' },
+      { name: 'Single-arm cable kickback', sets: '4 × 20 each' },
+    ],
+    hiit: {
+      duration: '20 min · 3 rounds',
+      moves: [
+        { name: 'Burpee', timing: '40s on / 20s off' },
+        { name: 'Hanging knee raise + twist', timing: '12 reps / 20s rest' },
+        { name: 'Box jump', timing: '30s on / 30s off' },
+        { name: 'Plank reach-through', timing: '40s on / 20s off' },
+        { name: 'Treadmill sprint (10–12 km/h)', timing: '20s on / 40s off' },
+      ],
+      note: '3 rounds · 60s rest between rounds'
+    }
+  },
+  {
+    day: 'Sunday',
+    short: 'Sun',
+    muscle: 'Rest',
+    color: '#444',
+    colorKey: 'rest',
+    subtitle: 'Full recovery',
+    rest: true
+  }
+];
+
+function getDoneKey(dayIndex, exIndex) {
+  return `vmw_done_${dayIndex}_${exIndex}`;
+}
+
+function getProgress(dayIndex) {
+  const day = DAYS[dayIndex];
+  if (!day.exercises) return 0;
+  const done = day.exercises.filter((_, i) => localStorage.getItem(getDoneKey(dayIndex, i)) === '1').length;
+  return done;
+}
+
+function buildHome() {
+  const strip = document.getElementById('weekStrip');
+  const cards = document.getElementById('dayCards');
+  strip.innerHTML = '';
+  cards.innerHTML = '';
+
+  DAYS.forEach((d, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'week-dot';
+    const progress = d.exercises ? getProgress(i) : 0;
+    const total = d.exercises ? d.exercises.length : 0;
+    const allDone = total > 0 && progress === total;
+    dot.innerHTML = `
+      <div class="week-dot-circle" style="background:${allDone ? d.color : d.color+'22'};border-color:${d.color};color:${allDone ? '#fff' : d.color}">
+        ${allDone ? '✓' : d.short.substring(0,2)}
+      </div>
+      <div class="week-dot-label">${d.short}</div>
+    `;
+    dot.onclick = () => openDay(i);
+    strip.appendChild(dot);
+
+    const card = document.createElement('div');
+    card.className = 'day-card animate-in';
+    card.innerHTML = `
+      <div class="day-card-header">
+        <div class="day-color-bar" style="background:${d.color}"></div>
+        <div class="day-card-info">
+          <div class="day-card-day">${d.day}</div>
+          <div class="day-card-name" style="color:${d.color}">${d.muscle}</div>
+          <div class="day-card-meta">${d.rest ? 'Rest & recover' : d.subtitle}</div>
+        </div>
+        <div class="day-card-arrow" style="color:${d.color}">›</div>
+      </div>
+      ${!d.rest && total > 0 ? `
+      <div style="padding: 0 16px 14px;">
+        <div class="progress-bar-row">
+          <span>${progress}/${total} exercises</span>
+          <span>${Math.round(progress/total*100)}%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:${progress/total*100}%;background:${d.color}"></div>
+        </div>
+      </div>` : ''}
+    `;
+    card.onclick = () => openDay(i);
+    cards.appendChild(card);
+  });
+}
+
+function openDay(i) {
+  const d = DAYS[i];
+  document.getElementById('detailDayLabel').textContent = d.day;
+  document.getElementById('detailTitle').textContent = d.muscle;
+  document.getElementById('detailTitle').style.color = d.color;
+  document.getElementById('detailSubtitle').textContent = d.subtitle;
+  document.getElementById('detailHero').style.background = d.color + '18';
+
+  const body = document.getElementById('detailBody');
+  body.innerHTML = '';
+
+  if (d.rest) {
+    body.innerHTML = `
+      <div class="rest-card">
+        <div class="rest-emoji">🛌</div>
+        <div class="rest-title">Rest Day</div>
+        <div class="rest-text">Full recovery. Walk, stretch, eat well, sleep well.<br>Your muscles grow when you rest, not when you train.</div>
+      </div>
+    `;
+  } else {
+    const warmup = d.warmupNote || '30 min incline walk or run';
+
+    body.innerHTML += `
+      <div class="section-title">Cardio warmup</div>
+      <div class="warmup-card">
+        <div class="warmup-icon">🏃</div>
+        <div class="warmup-text">
+          <strong>${warmup.includes('walk only') ? 'Incline walk' : 'Incline walk or run'}</strong>
+          <span>${warmup}</span>
+        </div>
+      </div>
+
+      <div class="section-title">Rules</div>
+      <div class="rules-strip">
+        <div class="rule-pill"><div class="rule-val" style="color:${d.color}">18–20</div><div class="rule-lbl">reps per set</div></div>
+        <div class="rule-pill"><div class="rule-val" style="color:${d.color}">4</div><div class="rule-lbl">sets each</div></div>
+        <div class="rule-pill"><div class="rule-val" style="color:${d.color}">60s</div><div class="rule-lbl">max rest</div></div>
+      </div>
+
+      <div class="section-title">${d.muscle} — ${d.exercises.length} exercises</div>
+      <div class="exercise-list" id="exList"></div>
+
+      <div class="section-title">Full-body HIIT — core focus</div>
+      <div class="hiit-card">
+        <div class="hiit-header">
+          <strong>Circuit</strong>
+          <span class="hiit-badge">${d.hiit.duration}</span>
+        </div>
+        ${d.hiit.moves.map(m => `
+          <div class="hiit-row">
+            <span>${m.name}</span>
+            <div class="hiit-timing">${m.timing}</div>
+          </div>
+        `).join('')}
+        <div class="hiit-note">${d.hiit.note}</div>
+      </div>
+      <div style="height: 32px;"></div>
+    `;
+
+    const exList = document.getElementById('exList');
+    d.exercises.forEach((ex, j) => {
+      const isDone = localStorage.getItem(getDoneKey(i, j)) === '1';
+      const item = document.createElement('div');
+      item.className = 'exercise-item' + (isDone ? ' done' : '');
+      item.innerHTML = `
+        <div class="ex-num" style="color:${d.color}">${j+1}</div>
+        <div class="ex-info">
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-sets">${ex.sets}</div>
+        </div>
+      `;
+      item.onclick = () => {
+        const key = getDoneKey(i, j);
+        const now = localStorage.getItem(key) === '1';
+        if (now) { localStorage.removeItem(key); item.classList.remove('done'); }
+        else { localStorage.setItem(key, '1'); item.classList.add('done'); }
+        buildHome();
+      };
+      exList.appendChild(item);
+    });
+  }
+
+  document.getElementById('splash').style.display = 'none';
+  const det = document.getElementById('detail');
+  det.classList.add('active');
+  det.scrollTop = 0;
+}
+
+function goHome() {
+  document.getElementById('detail').classList.remove('active');
+  document.getElementById('splash').style.display = 'flex';
+  buildHome();
+}
+
+buildHome();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
