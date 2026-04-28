@@ -5,837 +5,358 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Victor Mac Workout">
-  <meta name="theme-color" content="#0a0a0a">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-title" content="VMW">
+  <meta name="theme-color" content="#F5F0E8">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="manifest" href="manifest.json">
   <title>Victor Mac Workout</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0a;
-      --surface: #141414;
-      --surface2: #1c1c1c;
-      --border: rgba(255,255,255,0.07);
-      --text: #f0ede8;
-      --muted: rgba(240,237,232,0.45);
-      --chest: #e8503a;
-      --back: #4caf7d;
-      --legs: #7c6de8;
-      --biceps: #4aa8e8;
-      --shoulders: #e87c9a;
-      --triceps: #e8a84c;
-      --rest: #444;
-      --accent: #e8503a;
+      --cream:#F5F0E8;--cream2:#EDE7D9;--cream3:#DDD5C0;
+      --ink:#1A1A18;--ink2:#3D3D38;--ink3:#7A7A72;
+      --sage:#7A9E7E;--terra:#C4714A;--dust:#C4A96B;
+      --border:rgba(26,26,24,0.1);--shadow:0 2px 12px rgba(26,26,24,0.07);
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      overscroll-behavior: none;
-    }
-
-    /* SPLASH / HOME */
-    #splash {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      padding: env(safe-area-inset-top, 20px) 24px env(safe-area-inset-bottom, 20px);
-    }
-
-    .splash-header {
-      padding-top: 48px;
-      margin-bottom: 40px;
-    }
-
-    .splash-label {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .splash-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 52px;
-      line-height: 0.95;
-      color: var(--text);
-    }
-
-    .splash-title span { color: var(--accent); }
-
-    .week-strip {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-bottom: 32px;
-    }
-
-    .week-dot {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-    }
-
-    .week-dot-circle {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      border: 1.5px solid transparent;
-      transition: transform 0.15s, border-color 0.15s;
-    }
-
-    .week-dot:active .week-dot-circle { transform: scale(0.92); }
-
-    .week-dot-label {
-      font-size: 9px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .day-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      flex: 1;
-    }
-
-    .day-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.15s;
-    }
-
-    .day-card:active { transform: scale(0.98); }
-
-    .day-card-header {
-      display: flex;
-      align-items: center;
-      padding: 14px 16px;
-      gap: 12px;
-    }
-
-    .day-color-bar {
-      width: 4px;
-      height: 36px;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
-
-    .day-card-info { flex: 1; }
-
-    .day-card-day {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 2px;
-    }
-
-    .day-card-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      letter-spacing: 0.03em;
-      line-height: 1;
-    }
-
-    .day-card-meta {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .day-card-arrow {
-      font-size: 18px;
-      color: var(--muted);
-    }
-
-    /* DETAIL VIEW */
-    #detail {
-      display: none;
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      flex-direction: column;
-    }
-
-    #detail.active { display: flex; }
-
-    .detail-hero {
-      padding: env(safe-area-inset-top, 44px) 24px 24px;
-      position: relative;
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      color: var(--muted);
-      cursor: pointer;
-      margin-bottom: 20px;
-      padding: 6px 0;
-    }
-
-    .back-btn:active { opacity: 0.6; }
-
-    .detail-day-label {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-
-    .detail-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 56px;
-      line-height: 0.95;
-      margin-bottom: 8px;
-    }
-
-    .detail-subtitle {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .detail-body {
-      flex: 1;
-      padding: 0 16px env(safe-area-inset-bottom, 24px);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .section-title {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin: 20px 0 10px;
-      padding: 0 8px;
-    }
-
-    /* WARMUP CARD */
-    .warmup-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 4px;
-    }
-
-    .warmup-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: rgba(232,80,58,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .warmup-text strong {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 2px;
-    }
-
-    .warmup-text span {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    /* EXERCISE LIST */
-    .exercise-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .exercise-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: background 0.15s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .exercise-item.done {
-      opacity: 0.45;
-    }
-
-    .exercise-item.done::after {
-      content: '✓';
-      position: absolute;
-      right: 16px;
-      font-size: 16px;
-      color: #4caf7d;
-    }
-
-    .ex-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      color: var(--muted);
-      width: 28px;
-      text-align: center;
-      flex-shrink: 0;
-      line-height: 1;
-    }
-
-    .ex-info { flex: 1; }
-
-    .ex-name {
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 3px;
-    }
-
-    .ex-sets {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    /* HIIT SECTION */
-    .hiit-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-
-    .hiit-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .hiit-header strong {
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .hiit-badge {
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: rgba(232,80,58,0.15);
-      color: var(--accent);
-      padding: 3px 9px;
-      border-radius: 20px;
-    }
-
-    .hiit-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 11px 16px;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-    }
-
-    .hiit-row:last-child { border-bottom: none; }
-
-    .hiit-timing {
-      font-size: 11px;
-      color: var(--muted);
-      text-align: right;
-    }
-
-    .hiit-note {
-      padding: 10px 16px;
-      font-size: 11px;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-    }
-
-    /* REST DAY */
-    .rest-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 40px 24px;
-      text-align: center;
-      margin: 16px 0;
-    }
-
-    .rest-emoji { font-size: 48px; margin-bottom: 16px; }
-
-    .rest-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .rest-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
-
-    /* PROGRESS BAR */
-    .progress-bar-wrap {
-      margin: 16px 0 4px;
-      padding: 0 8px;
-    }
-
-    .progress-bar-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .progress-bar-bg {
-      height: 4px;
-      background: var(--surface2);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.4s ease;
-    }
-
-    /* RULES STRIP */
-    .rules-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-
-    .rule-pill {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-    }
-
-    .rule-val {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      line-height: 1;
-      margin-bottom: 3px;
-    }
-
-    .rule-lbl {
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-
-    /* ANIMATIONS */
-    @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .animate-in {
-      animation: slideUp 0.35s ease forwards;
-    }
-
-    .animate-in:nth-child(1) { animation-delay: 0.05s; opacity: 0; }
-    .animate-in:nth-child(2) { animation-delay: 0.1s; opacity: 0; }
-    .animate-in:nth-child(3) { animation-delay: 0.15s; opacity: 0; }
-    .animate-in:nth-child(4) { animation-delay: 0.2s; opacity: 0; }
-    .animate-in:nth-child(5) { animation-delay: 0.25s; opacity: 0; }
-    .animate-in:nth-child(6) { animation-delay: 0.3s; opacity: 0; }
-    .animate-in:nth-child(7) { animation-delay: 0.35s; opacity: 0; }
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+    body{background:var(--cream);color:var(--ink);font-family:'Barlow',sans-serif;min-height:100vh;min-height:-webkit-fill-available;overscroll-behavior:none;overflow-x:hidden;}
+    .bg-doodles{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;overflow:hidden;}
+    #splash{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh;min-height:-webkit-fill-available;padding:env(safe-area-inset-top,44px) 20px env(safe-area-inset-bottom,24px);}
+    .home-header{padding-top:16px;margin-bottom:24px;}
+    .home-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;}
+    .home-title{font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:900;line-height:.9;text-transform:uppercase;color:var(--ink);}
+    .home-title span{color:var(--terra);}
+    .week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:20px;background:var(--cream2);border-radius:16px;padding:10px 6px;border:1px solid var(--border);}
+    .week-dot{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
+    .week-dot-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;border:1.5px solid transparent;transition:transform .15s;}
+    .week-dot:active .week-dot-circle{transform:scale(.88);}
+    .week-dot-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;}
+    .day-cards{display:flex;flex-direction:column;gap:9px;}
+    .day-card{background:white;border:1px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s;}
+    .day-card:active{transform:scale(.985);}
+    .day-card-inner{display:flex;align-items:center;padding:13px 15px;gap:13px;}
+    .day-card-accent{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.05em;}
+    .day-card-info{flex:1;min-width:0;}
+    .day-card-day{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:1px;}
+    .day-card-muscle{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;line-height:1;}
+    .day-card-sub{font-size:11px;color:var(--ink3);margin-top:2px;}
+    .day-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+    .day-card-arrow{font-size:20px;color:var(--ink3);}
+    .day-card-kcal{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;}
+    .progress-wrap{padding:0 15px 13px;}
+    .progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);margin-bottom:5px;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.05em;}
+    .progress-bg{height:3px;background:var(--cream2);border-radius:4px;overflow:hidden;}
+    .progress-fill{height:100%;border-radius:4px;transition:width .4s ease;}
+    #detail{display:none;position:relative;z-index:1;min-height:100vh;min-height:-webkit-fill-available;flex-direction:column;background:var(--cream);}
+    #detail.active{display:flex;}
+    .detail-hero{padding:env(safe-area-inset-top,44px) 20px 18px;border-bottom:1px solid var(--border);}
+    .back-btn{display:inline-flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);cursor:pointer;margin-bottom:14px;padding:4px 0;}
+    .back-btn:active{opacity:.5;}
+    .detail-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px;}
+    .detail-title{font-family:'Barlow Condensed',sans-serif;font-size:62px;font-weight:900;text-transform:uppercase;line-height:.9;margin-bottom:10px;}
+    .detail-stats{display:flex;gap:18px;margin-bottom:12px;}
+    .stat-val{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;line-height:1;}
+    .stat-lbl{font-size:10px;color:var(--ink3);font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+    .kcal-bar-meta{display:flex;justify-content:space-between;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;}
+    .kcal-bar-bg{height:5px;background:var(--cream2);border-radius:4px;overflow:hidden;}
+    .kcal-bar-fill{height:100%;border-radius:4px;transition:width .4s ease;}
+    .detail-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px env(safe-area-inset-bottom,32px);}
+    .sec-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin:20px 0 10px 4px;}
+    .cardio-card{background:white;border:1px solid var(--border);border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:13px;box-shadow:var(--shadow);}
+    .cardio-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+    .cardio-info strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
+    .cardio-info span{font-size:12px;color:var(--ink3);}
+    .rules-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    .rule-pill{background:white;border:1px solid var(--border);border-radius:12px;padding:10px 8px;text-align:center;box-shadow:var(--shadow);}
+    .rule-val{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;line-height:1;margin-bottom:2px;}
+    .rule-lbl{font-size:10px;color:var(--ink3);font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.05em;text-transform:uppercase;}
+    .ex-list{display:flex;flex-direction:column;gap:8px;}
+    .ex-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:opacity .2s;}
+    .ex-card.done{opacity:.45;}
+    .ex-card-top{display:flex;align-items:center;padding:12px 14px;gap:12px;cursor:pointer;}
+    .ex-num{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--cream3);width:28px;text-align:center;line-height:1;flex-shrink:0;}
+    .ex-card.done .ex-num{color:var(--sage);}
+    .ex-info{flex:1;}
+    .ex-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.1;}
+    .ex-meta{display:flex;gap:10px;margin-top:3px;}
+    .ex-tag{font-size:11px;color:var(--ink3);font-family:'Barlow Condensed',sans-serif;font-weight:600;}
+    .ex-kcal{font-size:11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;}
+    .ex-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--cream3);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:all .2s;}
+    .ex-card.done .ex-check{background:var(--sage);border-color:var(--sage);color:white;}
+    .ex-illus{padding:0 14px 12px;display:none;}
+    .ex-illus.open{display:block;}
+    .ex-illus svg{width:100%;height:auto;}
+    .ex-note{font-size:12px;color:var(--ink3);margin-top:6px;line-height:1.5;font-style:italic;padding:6px 8px;background:var(--cream2);border-radius:8px;}
+    .hiit-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);}
+    .hiit-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;border-bottom:1px solid var(--border);}
+    .hiit-hdr-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;}
+    .hiit-badge{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:var(--cream2);color:var(--ink2);}
+    .hiit-move{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .2s;}
+    .hiit-move:last-child{border-bottom:none;}
+    .hiit-move.done{opacity:.4;}
+    .hiit-move-l{display:flex;align-items:center;gap:10px;}
+    .hiit-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+    .hiit-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+    .hiit-sub{font-size:10px;color:var(--ink3);font-style:italic;}
+    .hiit-timing{font-size:11px;color:var(--ink3);font-family:'Barlow Condensed',sans-serif;font-weight:600;text-align:right;}
+    .hiit-kcal{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;}
+    .finisher{padding:11px 15px;font-size:12px;color:var(--ink3);border-top:1px solid var(--border);font-style:italic;}
+    .rest-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;}
+    .rest-title{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;text-transform:uppercase;margin:20px 0 8px;}
+    .rest-text{font-size:14px;color:var(--ink3);line-height:1.6;}
+    .spacer{height:40px;}
   </style>
 </head>
 <body>
+<div class="bg-doodles">
+<svg width="100%" height="100%" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" opacity="0.04">
+  <g transform="translate(18,55) rotate(-20)"><rect x="0" y="8" width="58" height="8" rx="2" fill="none" stroke="#1A1A18" stroke-width="2"/><rect x="-8" y="0" width="8" height="24" rx="3" fill="none" stroke="#1A1A18" stroke-width="2"/><rect x="58" y="0" width="8" height="24" rx="3" fill="none" stroke="#1A1A18" stroke-width="2"/></g>
+  <g transform="translate(312,38)"><circle cx="25" cy="38" r="22" fill="none" stroke="#1A1A18" stroke-width="2"/><path d="M13 18 Q25 2 37 18" fill="none" stroke="#1A1A18" stroke-width="2"/><rect x="16" y="13" width="18" height="8" rx="3" fill="none" stroke="#1A1A18" stroke-width="2"/></g>
+  <g transform="translate(8,275) rotate(10)"><rect x="5" y="10" width="24" height="50" rx="6" fill="none" stroke="#1A1A18" stroke-width="2"/><rect x="8" y="3" width="18" height="9" rx="3" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="5" y1="24" x2="29" y2="24" stroke="#1A1A18" stroke-width="1.5"/></g>
+  <g transform="translate(332,195) rotate(-15)"><rect x="0" y="0" width="38" height="52" rx="5" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="0" y1="12" x2="38" y2="12" stroke="#1A1A18" stroke-width="1.5"/><line x1="7" y1="24" x2="31" y2="24" stroke="#1A1A18" stroke-width="1"/><line x1="7" y1="32" x2="31" y2="32" stroke="#1A1A18" stroke-width="1"/></g>
+  <g transform="translate(14,595)"><circle cx="34" cy="34" r="31" fill="none" stroke="#1A1A18" stroke-width="2"/><circle cx="34" cy="34" r="21" fill="none" stroke="#1A1A18" stroke-width="1.5"/><circle cx="34" cy="34" r="7" fill="none" stroke="#1A1A18" stroke-width="2"/></g>
+  <g transform="translate(275,575) rotate(15)"><rect x="0" y="9" width="88" height="6" rx="2" fill="none" stroke="#1A1A18" stroke-width="2"/><rect x="-5" y="0" width="6" height="24" rx="2" fill="none" stroke="#1A1A18" stroke-width="2"/><rect x="1" y="2" width="6" height="20" rx="2" fill="none" stroke="#1A1A18" stroke-width="2"/><rect x="81" y="2" width="6" height="20" rx="2" fill="none" stroke="#1A1A18" stroke-width="2"/><rect x="87" y="0" width="6" height="24" rx="2" fill="none" stroke="#1A1A18" stroke-width="2"/></g>
+  <g transform="translate(148,445) rotate(-5)"><path d="M0 20 Q5 5 30 8 Q55 5 70 15 L72 22 Q50 30 20 28 Z" fill="none" stroke="#1A1A18" stroke-width="2"/><path d="M20 28 L18 38 L65 38 L72 22" fill="none" stroke="#1A1A18" stroke-width="2"/></g>
+  <g transform="translate(168,68)"><circle cx="24" cy="29" r="21" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="24" y1="10" x2="24" y2="19" stroke="#1A1A18" stroke-width="2"/><line x1="24" y1="29" x2="34" y2="21" stroke="#1A1A18" stroke-width="2"/><rect x="17" y="4" width="14" height="5" rx="2" fill="none" stroke="#1A1A18" stroke-width="1.5"/></g>
+</svg>
+</div>
 
-<!-- HOME -->
 <div id="splash">
-  <div class="splash-header">
-    <div class="splash-label">Training Plan</div>
-    <div class="splash-title">Victor Mac<br><span>Workout</span></div>
+  <div class="home-header">
+    <div class="home-eyebrow">Weekly Training Plan</div>
+    <div class="home-title">Victor<br><span>Mac</span><br>Workout</div>
   </div>
-
   <div class="week-strip" id="weekStrip"></div>
-
   <div class="day-cards" id="dayCards"></div>
 </div>
 
-<!-- DETAIL -->
 <div id="detail">
   <div class="detail-hero" id="detailHero">
     <div class="back-btn" onclick="goHome()">← Back</div>
-    <div class="detail-day-label" id="detailDayLabel"></div>
-    <div class="detail-title" id="detailTitle"></div>
-    <div class="detail-subtitle" id="detailSubtitle"></div>
+    <div class="detail-eyebrow" id="dEyebrow"></div>
+    <div class="detail-title" id="dTitle"></div>
+    <div class="detail-stats" id="dStats"></div>
+    <div id="dKcalBar"></div>
   </div>
   <div class="detail-body" id="detailBody"></div>
 </div>
 
 <script>
-const DAYS = [
-  {
-    day: 'Monday',
-    short: 'Mon',
-    muscle: 'Chest',
-    color: '#e8503a',
-    colorKey: 'chest',
-    subtitle: '30 min cardio · Weights · Full-body HIIT',
-    exercises: [
-      { name: 'Dumbbell flat press', sets: '4 × 18–20' },
-      { name: 'Incline dumbbell press', sets: '4 × 18–20' },
-      { name: 'Cable fly (low to high)', sets: '4 × 20' },
-      { name: 'Push-up — slow tempo 3-1-1', sets: '4 × 20+' },
-      { name: 'Chest dip — bodyweight, controlled', sets: '4 × 15–20' },
-    ],
-    hiit: {
-      duration: '20 min · 3 rounds',
-      moves: [
-        { name: 'Burpee', timing: '40s on / 20s off' },
-        { name: 'Mountain climbers', timing: '40s on / 20s off' },
-        { name: 'Jump squat', timing: '30s on / 30s off' },
-        { name: 'Plank to shoulder tap', timing: '40s on / 20s off' },
-        { name: 'Bicycle crunch', timing: '40s on / 20s off' },
-      ],
-      note: '3 rounds · 60s rest between rounds'
-    }
-  },
-  {
-    day: 'Tuesday',
-    short: 'Tue',
-    muscle: 'Back',
-    color: '#4caf7d',
-    colorKey: 'back',
-    subtitle: '30 min cardio · Weights · Full-body HIIT',
-    exercises: [
-      { name: 'Lat pulldown (wide grip)', sets: '4 × 18–20' },
-      { name: 'Seated cable row (close grip)', sets: '4 × 18–20' },
-      { name: 'Single-arm dumbbell row', sets: '4 × 18–20 each' },
-      { name: 'Straight-arm cable pulldown', sets: '4 × 20' },
-      { name: 'Face pull (cable rope)', sets: '4 × 20' },
-      { name: 'Hyperextension (bodyweight or light plate)', sets: '4 × 20' },
-    ],
-    hiit: {
-      duration: '20 min · 3 rounds',
-      moves: [
-        { name: 'Renegade row (light DBs)', timing: '10 reps / 20s rest' },
-        { name: 'Plank weighted hold', timing: '45s on / 15s off' },
-        { name: 'Box jump or broad jump', timing: '30s on / 30s off' },
-        { name: 'Russian twist', timing: '40s on / 20s off' },
-        { name: 'Burpee', timing: '30s on / 30s off' },
-      ],
-      note: '3 rounds · 60s rest between rounds'
-    }
-  },
-  {
-    day: 'Wednesday',
-    short: 'Wed',
-    muscle: 'Legs',
-    color: '#7c6de8',
-    colorKey: 'legs',
-    subtitle: 'Incline walk · Weights · HIIT',
-    warmupNote: '30 min incline walk only — save the legs',
-    exercises: [
-      { name: 'Goblet squat (dumbbell)', sets: '4 × 20' },
-      { name: 'Leg press', sets: '4 × 20' },
-      { name: 'Walking lunge (dumbbell)', sets: '4 × 20 steps' },
-      { name: 'Romanian deadlift — light, controlled', sets: '4 × 18–20' },
-      { name: 'Leg curl (seated or lying)', sets: '4 × 20' },
-      { name: 'Leg extension', sets: '4 × 20' },
-      { name: 'Standing calf raise', sets: '4 × 25–30' },
-    ],
-    hiit: {
-      duration: '15 min · 2–3 rounds',
-      moves: [
-        { name: 'Jump squat', timing: '30s on / 30s off' },
-        { name: 'Reverse crunch', timing: '40s on / 20s off' },
-        { name: 'Lateral bound', timing: '30s on / 30s off' },
-        { name: 'Dead bug', timing: '40s on / 20s off' },
-      ],
-      note: '2–3 rounds · listen to your body'
-    }
-  },
-  {
-    day: 'Thursday',
-    short: 'Thu',
-    muscle: 'Biceps',
-    color: '#4aa8e8',
-    colorKey: 'biceps',
-    subtitle: '30 min cardio · Weights · Full-body HIIT',
-    exercises: [
-      { name: 'EZ bar curl (standing)', sets: '4 × 18–20' },
-      { name: 'Incline dumbbell curl', sets: '4 × 18–20' },
-      { name: 'Hammer curl', sets: '4 × 20' },
-      { name: 'Cable rope curl (supinated)', sets: '4 × 20' },
-      { name: '21s — EZ bar (7 bottom / 7 top / 7 full)', sets: '4 rounds' },
-    ],
-    hiit: {
-      duration: '20 min · 3 rounds',
-      moves: [
-        { name: 'Hollow body hold', timing: '30s on / 15s off' },
-        { name: 'Jump lunge', timing: '40s on / 20s off' },
-        { name: 'Ab wheel rollout', timing: '10 reps / 20s rest' },
-        { name: 'High knees', timing: '40s on / 20s off' },
-        { name: 'V-up', timing: '30s on / 15s off' },
-      ],
-      note: '3 rounds · 60s rest between rounds'
-    }
-  },
-  {
-    day: 'Friday',
-    short: 'Fri',
-    muscle: 'Shoulders',
-    color: '#e87c9a',
-    colorKey: 'shoulders',
-    subtitle: '30 min cardio · Weights · Full-body HIIT',
-    exercises: [
-      { name: 'Dumbbell overhead press (seated)', sets: '4 × 18–20' },
-      { name: 'Lateral raise (dumbbell)', sets: '4 × 20' },
-      { name: 'Front raise (plate or DB)', sets: '4 × 18–20' },
-      { name: 'Rear delt fly (cable or bent-over DB)', sets: '4 × 20' },
-      { name: 'Arnold press', sets: '4 × 15–18' },
-      { name: 'Cable upright row', sets: '4 × 20' },
-    ],
-    hiit: {
-      duration: '20 min · 3 rounds',
-      moves: [
-        { name: 'Dumbbell thruster (light)', timing: '12 reps / 30s rest' },
-        { name: 'Mountain climbers', timing: '40s on / 20s off' },
-        { name: 'Push-up to pike', timing: '40s on / 20s off' },
-        { name: 'Bicycle crunch', timing: '40s on / 20s off' },
-        { name: 'Lateral shuffle + touch', timing: '30s on / 30s off' },
-      ],
-      note: '3 rounds · 60s rest between rounds'
-    }
-  },
-  {
-    day: 'Saturday',
-    short: 'Sat',
-    muscle: 'Triceps',
-    color: '#e8a84c',
-    colorKey: 'triceps',
-    subtitle: '30 min cardio · Weights · Full-body HIIT',
-    exercises: [
-      { name: 'Cable pushdown (rope)', sets: '4 × 20' },
-      { name: 'Overhead cable extension (rope)', sets: '4 × 18–20' },
-      { name: 'Dumbbell overhead extension', sets: '4 × 18–20' },
-      { name: 'Bench dip (bodyweight)', sets: '4 × 20' },
-      { name: 'Close-grip push-up (slow)', sets: '4 × 20' },
-      { name: 'Single-arm cable kickback', sets: '4 × 20 each' },
-    ],
-    hiit: {
-      duration: '20 min · 3 rounds',
-      moves: [
-        { name: 'Burpee', timing: '40s on / 20s off' },
-        { name: 'Hanging knee raise + twist', timing: '12 reps / 20s rest' },
-        { name: 'Box jump', timing: '30s on / 30s off' },
-        { name: 'Plank reach-through', timing: '40s on / 20s off' },
-        { name: 'Treadmill sprint (10–12 km/h)', timing: '20s on / 40s off' },
-      ],
-      note: '3 rounds · 60s rest between rounds'
-    }
-  },
-  {
-    day: 'Sunday',
-    short: 'Sun',
-    muscle: 'Rest',
-    color: '#444',
-    colorKey: 'rest',
-    subtitle: 'Full recovery',
-    rest: true
-  }
+const KCAL={squats:8,split_squats:7,hip_thrusters:6,calf_raises:4,leg_ext:5,leg_curl:5,db_overhead_ext:5,zbar_tricep:5,cable_rope_pushdown:5,db_kickback:4,dips:7,shoulder_press:7,lateral_raise:4,front_raise:4,cable_upright_row:5,trap_cable:5,shoulder_rotation:3,db_curl:5,hammer_curl:5,incline_db_curl:5,zbar_21s:8,preacher_curl:5,flat_press_fly:7,incline_press_fly:7,decline_press_fly:7,chest_pullover:5,chest_close_grip:6,fly_machine:5,deadlift:10,lat_pulldown:6,cable_row:6,vbar_pulldown:6,hiit_mnt_climbers:9,hiit_jumping_jacks:7,hiit_med_ball_squat:8,hiit_plank:5,hiit_lateral:10,hiit_abs:5,hiit_leg_raises:6,hiit_side_bend:5,hiit_russian:6,hiit_front_raise_def:6,hiit_hanging_leg:7,hiit_pushup_burpee:12,hiit_wall_sit:6,hiit_kb_lunge_chop:11,hiit_kb_russian:8,hiit_kb_uppercut:9,hiit_kb_swing:10,hiit_kb_front:6};
+
+const SVG_STANDING=`<svg viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg"><text x="70" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">START</text><text x="210" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">PEAK</text><circle cx="70" cy="26" r="8" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="34" x2="70" y2="68" stroke="#1A1A18" stroke-width="2"/><line x1="54" y1="48" x2="86" y2="48" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="68" x2="58" y2="96" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="68" x2="82" y2="96" stroke="#1A1A18" stroke-width="2"/><circle cx="210" cy="26" r="8" fill="none" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="34" x2="210" y2="68" stroke="#C4714A" stroke-width="2"/><line x1="192" y1="53" x2="228" y2="53" stroke="#C4714A" stroke-width="2"/><line x1="192" y1="53" x2="185" y2="40" stroke="#C4714A" stroke-width="2"/><line x1="228" y1="53" x2="235" y2="40" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="68" x2="198" y2="96" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="68" x2="222" y2="96" stroke="#C4714A" stroke-width="2"/><line x1="140" y1="60" x2="162" y2="60" stroke="#C4A96B" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="162,56 170,60 162,64" fill="#C4A96B"/></svg>`;
+
+const SVG_SQUAT=`<svg viewBox="0 0 280 115" xmlns="http://www.w3.org/2000/svg"><text x="70" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">STAND</text><text x="210" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">SQUAT</text><circle cx="70" cy="26" r="8" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="34" x2="70" y2="70" stroke="#1A1A18" stroke-width="2"/><line x1="54" y1="48" x2="86" y2="48" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="70" x2="57" y2="98" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="70" x2="83" y2="98" stroke="#1A1A18" stroke-width="2"/><circle cx="210" cy="26" r="8" fill="none" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="34" x2="210" y2="60" stroke="#C4714A" stroke-width="2"/><line x1="190" y1="48" x2="230" y2="48" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="60" x2="186" y2="88" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="60" x2="234" y2="88" stroke="#C4714A" stroke-width="2"/><line x1="186" y1="88" x2="178" y2="108" stroke="#C4714A" stroke-width="2"/><line x1="234" y1="88" x2="242" y2="108" stroke="#C4714A" stroke-width="2"/><line x1="140" y1="65" x2="162" y2="65" stroke="#C4A96B" stroke-width="1.5" stroke-dasharray="3,3"/><polygon points="162,61 170,65 162,69" fill="#C4A96B"/></svg>`;
+
+const SVG_SPLIT=`<svg viewBox="0 0 280 115" xmlns="http://www.w3.org/2000/svg"><text x="70" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">STAND</text><text x="210" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">LUNGE DOWN</text><circle cx="70" cy="26" r="8" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="34" x2="70" y2="70" stroke="#1A1A18" stroke-width="2"/><line x1="54" y1="48" x2="86" y2="48" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="70" x2="57" y2="98" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="70" x2="83" y2="98" stroke="#1A1A18" stroke-width="2"/><circle cx="205" cy="24" r="8" fill="none" stroke="#C4714A" stroke-width="2"/><line x1="205" y1="32" x2="205" y2="60" stroke="#C4714A" stroke-width="2"/><line x1="188" y1="44" x2="222" y2="44" stroke="#C4714A" stroke-width="2"/><line x1="205" y1="60" x2="183" y2="84" stroke="#C4714A" stroke-width="2"/><line x1="205" y1="60" x2="228" y2="74" stroke="#C4714A" stroke-width="2"/><line x1="183" y1="84" x2="173" y2="108" stroke="#C4714A" stroke-width="2"/><line x1="228" y1="74" x2="245" y2="108" stroke="#C4714A" stroke-width="2"/></svg>`;
+
+const SVG_HIP=`<svg viewBox="0 0 280 115" xmlns="http://www.w3.org/2000/svg"><text x="70" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">START</text><text x="210" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">THRUST UP</text><circle cx="55" cy="50" r="8" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="55" y1="58" x2="80" y2="68" stroke="#1A1A18" stroke-width="2"/><line x1="80" y1="68" x2="100" y2="56" stroke="#1A1A18" stroke-width="2"/><line x1="100" y1="56" x2="100" y2="82" stroke="#1A1A18" stroke-width="2"/><rect x="18" y="68" width="16" height="32" rx="4" fill="none" stroke="#7A7A72" stroke-width="1.5"/><line x1="34" y1="76" x2="80" y2="76" stroke="#1A1A18" stroke-width="1.5"/><circle cx="192" cy="36" r="8" fill="none" stroke="#C4714A" stroke-width="2"/><line x1="192" y1="44" x2="217" y2="54" stroke="#C4714A" stroke-width="2"/><line x1="217" y1="54" x2="237" y2="80" stroke="#C4714A" stroke-width="2"/><line x1="237" y1="80" x2="237" y2="108" stroke="#C4714A" stroke-width="2"/><rect x="155" y="68" width="16" height="32" rx="4" fill="none" stroke="#7A7A72" stroke-width="1.5"/><line x1="171" y1="76" x2="217" y2="60" stroke="#C4714A" stroke-width="1.5"/></svg>`;
+
+const SVG_SIDEBEND=`<svg viewBox="0 0 280 115" xmlns="http://www.w3.org/2000/svg"><text x="70" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">START</text><text x="210" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">SIDE BEND</text><circle cx="70" cy="26" r="8" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="34" x2="70" y2="70" stroke="#1A1A18" stroke-width="2"/><line x1="54" y1="48" x2="86" y2="48" stroke="#1A1A18" stroke-width="2"/><line x1="86" y1="48" x2="90" y2="62" stroke="#1A1A18" stroke-width="1.5"/><line x1="70" y1="70" x2="58" y2="98" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="70" x2="82" y2="98" stroke="#1A1A18" stroke-width="2"/><circle cx="200" cy="26" r="8" fill="none" stroke="#C4714A" stroke-width="2"/><line x1="200" y1="34" x2="214" y2="68" stroke="#C4714A" stroke-width="2"/><line x1="184" y1="48" x2="218" y2="52" stroke="#C4714A" stroke-width="2"/><line x1="184" y1="48" x2="179" y2="62" stroke="#C4714A" stroke-width="1.5"/><line x1="218" y1="52" x2="228" y2="66" stroke="#C4714A" stroke-width="1.5"/><circle cx="232" cy="70" r="6" fill="none" stroke="#C4A96B" stroke-width="2"/><line x1="214" y1="68" x2="200" y2="98" stroke="#C4714A" stroke-width="2"/><line x1="214" y1="68" x2="228" y2="98" stroke="#C4714A" stroke-width="2"/></svg>`;
+
+const SVG_CURL=`<svg viewBox="0 0 280 115" xmlns="http://www.w3.org/2000/svg"><text x="70" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">START</text><text x="210" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">PEAK</text><circle cx="70" cy="26" r="8" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="34" x2="70" y2="70" stroke="#1A1A18" stroke-width="2"/><line x1="54" y1="48" x2="86" y2="48" stroke="#1A1A18" stroke-width="2"/><line x1="86" y1="48" x2="90" y2="72" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="70" x2="58" y2="98" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="70" x2="82" y2="98" stroke="#1A1A18" stroke-width="2"/><circle cx="210" cy="26" r="8" fill="none" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="34" x2="210" y2="70" stroke="#C4714A" stroke-width="2"/><line x1="192" y1="50" x2="228" y2="50" stroke="#C4714A" stroke-width="2"/><line x1="228" y1="50" x2="222" y2="36" stroke="#C4714A" stroke-width="2"/><circle cx="218" cy="33" r="5" fill="none" stroke="#C4A96B" stroke-width="1.5"/><line x1="210" y1="70" x2="198" y2="98" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="70" x2="222" y2="98" stroke="#C4714A" stroke-width="2"/></svg>`;
+
+const SVG_PRESS=`<svg viewBox="0 0 280 115" xmlns="http://www.w3.org/2000/svg"><text x="70" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">ARMS BENT</text><text x="210" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">PRESS UP</text><circle cx="70" cy="30" r="8" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="38" x2="70" y2="74" stroke="#1A1A18" stroke-width="2"/><line x1="54" y1="52" x2="86" y2="52" stroke="#1A1A18" stroke-width="2"/><line x1="54" y1="52" x2="48" y2="64" stroke="#1A1A18" stroke-width="2"/><line x1="86" y1="52" x2="92" y2="64" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="74" x2="58" y2="100" stroke="#1A1A18" stroke-width="2"/><line x1="70" y1="74" x2="82" y2="100" stroke="#1A1A18" stroke-width="2"/><circle cx="210" cy="30" r="8" fill="none" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="38" x2="210" y2="74" stroke="#C4714A" stroke-width="2"/><line x1="190" y1="54" x2="230" y2="54" stroke="#C4714A" stroke-width="2"/><line x1="190" y1="54" x2="182" y2="38" stroke="#C4714A" stroke-width="2"/><line x1="230" y1="54" x2="238" y2="38" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="74" x2="198" y2="100" stroke="#C4714A" stroke-width="2"/><line x1="210" y1="74" x2="222" y2="100" stroke="#C4714A" stroke-width="2"/></svg>`;
+
+const SVG_ROW=`<svg viewBox="0 0 280 115" xmlns="http://www.w3.org/2000/svg"><text x="70" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">ARMS EXTENDED</text><text x="210" y="11" font-family="Barlow Condensed" font-size="9" font-weight="700" fill="#7A7A72" text-anchor="middle" letter-spacing="1">ROW IN</text><circle cx="38" cy="42" r="8" fill="none" stroke="#1A1A18" stroke-width="2"/><line x1="38" y1="50" x2="80" y2="62" stroke="#1A1A18" stroke-width="2"/><line x1="56" y1="55" x2="62" y2="42" stroke="#1A1A18" stroke-width="2"/><line x1="62" y1="42" x2="96" y2="45" stroke="#1A1A18" stroke-width="2"/><line x1="80" y1="62" x2="68" y2="90" stroke="#1A1A18" stroke-width="2"/><line x1="80" y1="62" x2="95" y2="86" stroke="#1A1A18" stroke-width="2"/><circle cx="178" cy="42" r="8" fill="none" stroke="#C4714A" stroke-width="2"/><line x1="178" y1="50" x2="220" y2="62" stroke="#C4714A" stroke-width="2"/><line x1="196" y1="55" x2="202" y2="40" stroke="#C4714A" stroke-width="2"/><line x1="202" y1="40" x2="220" y2="46" stroke="#C4714A" stroke-width="2"/><line x1="220" y1="46" x2="208" y2="46" stroke="#C4714A" stroke-width="2"/><line x1="220" y1="62" x2="208" y2="88" stroke="#C4714A" stroke-width="2"/><line x1="220" y1="62" x2="235" y2="86" stroke="#C4714A" stroke-width="2"/></svg>`;
+
+const ILLUS={squats:SVG_SQUAT,split_squats:SVG_SPLIT,hip_thrusters:SVG_HIP,hiit_side_bend:SVG_SIDEBEND,db_curl:SVG_CURL,hammer_curl:SVG_CURL,incline_db_curl:SVG_CURL,zbar_21s:SVG_CURL,preacher_curl:SVG_CURL,shoulder_press:SVG_PRESS,flat_press_fly:SVG_PRESS,incline_press_fly:SVG_PRESS,decline_press_fly:SVG_PRESS,chest_close_grip:SVG_PRESS,deadlift:SVG_ROW,cable_row:SVG_ROW,lat_pulldown:SVG_PRESS};
+
+const DAYS=[
+  {day:'Monday',short:'Mon',muscle:'Chest',color:'#C4714A',rest:false,
+   cardio:{icon:'🏃',name:'10 min cardio',note:'Your choice — fast walk incline, bike, elliptical. Target 120+ BPM'},
+   exercises:[
+    {name:'Flat Press + Fly',sets:'3 × 8–12',k:'flat_press_fly',note:'Superset: press then immediately fly. Full stretch on the fly.',i:'flat_press_fly'},
+    {name:'Incline Press + Fly',sets:'3 × 8–12',k:'incline_press_fly',note:'Bench 30–45°. Control the negative. Squeeze at top.',i:'incline_press_fly'},
+    {name:'Decline Press + Fly',sets:'3 × 8–12',k:'decline_press_fly',note:'Lower chest focus. Elbows at 45° angle throughout.',i:'decline_press_fly'},
+    {name:'Chest Pullover',sets:'2 × 8–12',k:'chest_pullover',note:'Single DB, arms extended overhead. Deep stretch at bottom.',i:null},
+    {name:'Close Grip Press',sets:'2 × 8–12',k:'chest_close_grip',note:'Hands shoulder-width. Elbows tucked, hits inner chest and triceps.',i:'chest_close_grip'},
+    {name:'Fly Machine',sets:'3 × 8–12',k:'fly_machine',note:'Full range of motion. Pause and squeeze hard at peak contraction.',i:null},
+   ],
+   hiit:{name:'HIIT Core',color:'#C4714A',moves:[
+    {name:'Abs — crunches / sit-ups',t:'3 × 12–15',k:'hiit_abs',note:null,i:'hiit_abs'},
+    {name:'Leg Raises',t:'3 × 12',k:'hiit_leg_raises',note:null,i:'hiit_leg_raises'},
+    {name:'Dumbbell Side Bend',t:'3 × 12 each side',k:'hiit_side_bend',note:'Lower body laterally, weight in one hand. Swap sides.',i:'hiit_side_bend'},
+    {name:'Weighted Russian Twist',t:'3 × 12',k:'hiit_russian',note:'Standing, defensive basketball stance.',i:null},
+    {name:'Front Raise — defensive stance',t:'3 × 12',k:'hiit_front_raise_def',note:'Basketball defensive position. Raise weight to shoulder height.',i:null},
+    {name:'Hanging Leg Raises',t:'3 × 10–12',k:'hiit_hanging_leg',note:null,i:null},
+   ]}},
+  {day:'Tuesday',short:'Tue',muscle:'Back',color:'#7A9E7E',rest:false,
+   cardio:{icon:'🚣',name:'10 min Rowing Machine',note:'Power pace. Strong strokes, full extension. Target 120+ BPM'},
+   exercises:[
+    {name:'Deadlift',sets:'3 × 8–12',k:'deadlift',note:'Hip hinge, neutral spine. Drive through heels. Controlled negative.',i:'deadlift'},
+    {name:'Lat Pulldown',sets:'3 × 8–12',k:'lat_pulldown',note:'Wide grip. Pull to upper chest. Lean slightly back. Full stretch at top.',i:'lat_pulldown'},
+    {name:'Cable Row',sets:'3 × 8–12',k:'cable_row',note:'Squeeze shoulder blades together at peak. Slow negative.',i:'cable_row'},
+    {name:'V-Bar Pulldown',sets:'3 × 8–12',k:'vbar_pulldown',note:'Neutral grip. Elbows drive down to hips. Full stretch at top.',i:'lat_pulldown'},
+   ],
+   hiit:{name:'HIIT Kettlebell',color:'#7A9E7E',moves:[
+    {name:'Lunge Jump Chop',t:'3 × 10',k:'hiit_kb_lunge_chop',note:'KB optional',i:null},
+    {name:'Russian Twist',t:'3 × 12',k:'hiit_kb_russian',note:'KB optional',i:null},
+    {name:'Uppercuts',t:'3 × 12 each',k:'hiit_kb_uppercut',note:'KB optional',i:null},
+    {name:'KB Swings',t:'3 × 15',k:'hiit_kb_swing',note:'KB optional',i:null},
+    {name:'Front Raises',t:'3 × 12',k:'hiit_kb_front',note:'KB optional',i:null},
+   ]}},
+  {day:'Wednesday',short:'Wed',muscle:'Legs',color:'#7C6DE8',rest:false,
+   cardio:{icon:'🏃',name:'10 min cardio',note:'Your choice — fast walk, bike, elliptical. Target 120+ BPM'},
+   exercises:[
+    {name:'Squats',sets:'3 × 8–12',k:'squats',note:'Feet shoulder-width. Knees track over toes. Go deep.',i:'squats'},
+    {name:'Split Squats',sets:'3 × 8–12 each',k:'split_squats',note:'Bulgarian or standard. Front knee at 90° at bottom.',i:'split_squats'},
+    {name:'Hip Thrusters',sets:'3 × 8–12',k:'hip_thrusters',note:'Back on bench, barbell on hips. Squeeze glutes hard at top.',i:'hip_thrusters'},
+    {name:'Calf Raises',sets:'3 × 12–15',k:'calf_raises',note:'Full range — deep stretch down, all the way up. Slow.',i:null},
+    {name:'Leg Extension (Front Curl)',sets:'3 × 8–12',k:'leg_ext',note:'Machine. 3-second slow negative every rep.',i:null},
+    {name:'Leg Curl (Back Curl)',sets:'3 × 8–12',k:'leg_curl',note:'Machine. Full extension at start. Squeeze at peak.',i:null},
+   ],
+   hiit:{name:'HIIT Basketball',color:'#7C6DE8',moves:[
+    {name:'Mountain Climbers',t:'3 × 40s on / 20s off',k:'hiit_mnt_climbers',note:null,i:null},
+    {name:'Jumping Jacks',t:'3 × 40s on / 20s off',k:'hiit_jumping_jacks',note:null,i:null},
+    {name:'Medicine Ball Squats',t:'3 × 12',k:'hiit_med_ball_squat',note:null,i:null},
+    {name:'Plank',t:'3 × 45s',k:'hiit_plank',note:null,i:null},
+    {name:'Lateral Defensive Slides',t:'3 × 30s each way',k:'hiit_lateral',note:'Basketball defensive position throughout',i:null},
+   ]}},
+  {day:'Thursday',short:'Thu',muscle:'Biceps',color:'#4AA8E8',rest:false,
+   cardio:{icon:'🏃',name:'10 min cardio',note:'Your choice — fast walk, bike, elliptical. Target 120+ BPM'},
+   exercises:[
+    {name:'Dumbbell Curl',sets:'3 × 8–12',k:'db_curl',note:'Standing. Full supination at top — rotate the wrist outward.',i:'db_curl'},
+    {name:'Hammer Curl',sets:'3 × 8–12',k:'hammer_curl',note:'Neutral grip. Targets brachialis and forearm thickness.',i:'hammer_curl'},
+    {name:'Incline Dumbbell Curl',sets:'3 × 8–12',k:'incline_db_curl',note:'Bench at 45°. Arms hang back behind body. Full stretch.',i:'incline_db_curl'},
+    {name:'Z-Bar 21s',sets:'3 rounds',k:'zbar_21s',note:'7 reps bottom half + 7 top half + 7 full range. Light weight.',i:'zbar_21s'},
+    {name:'Preacher Curl',sets:'3 × 8–12',k:'preacher_curl',note:'Pad supports upper arm. No swinging. 3-second slow negative.',i:'preacher_curl'},
+   ],
+   hiit:{name:'HIIT Core',color:'#4AA8E8',moves:[
+    {name:'Abs — crunches / sit-ups',t:'3 × 12–15',k:'hiit_abs',note:null,i:null},
+    {name:'Leg Raises',t:'3 × 12',k:'hiit_leg_raises',note:null,i:null},
+    {name:'Dumbbell Side Bend',t:'3 × 12 each side',k:'hiit_side_bend',note:'Lower body laterally, weight in one hand.',i:'hiit_side_bend'},
+    {name:'Weighted Russian Twist',t:'3 × 12',k:'hiit_russian',note:'Standing, defensive basketball stance.',i:null},
+    {name:'Front Raise — defensive stance',t:'3 × 12',k:'hiit_front_raise_def',note:'Basketball defensive position.',i:null},
+    {name:'Hanging Leg Raises',t:'3 × 10–12',k:'hiit_hanging_leg',note:null,i:null},
+   ]}},
+  {day:'Friday',short:'Fri',muscle:'Shoulders',color:'#C4A96B',rest:false,
+   cardio:{icon:'🏃',name:'10 min cardio',note:'Your choice. Target 120+ BPM'},
+   exercises:[
+    {name:'Shoulder Press',sets:'3 × 8–12',k:'shoulder_press',note:'DB or barbell. Press overhead, full extension. Controlled down.',i:'shoulder_press'},
+    {name:'Lateral Raise',sets:'3 × 8–12',k:'lateral_raise',note:'Lead with elbows. Stop at shoulder height. Slight bend in elbow.',i:null},
+    {name:'Front Raise',sets:'3 × 8–12',k:'front_raise',note:'Plate or DB. Arms straight. Stop at shoulder height. No swinging.',i:null},
+    {name:'Cable Upright Row',sets:'3 × 8–12',k:'cable_upright_row',note:'Pull to chin, elbows flare wide. Slow negative.',i:'cable_row'},
+    {name:'Trap — Bar or Cable',sets:'3 × 8–12',k:'trap_cable',note:'Shrug up and slightly back. 1-second hold at top.',i:null},
+    {name:'Shoulder Rotation with Weight',sets:'3 × 12 each',k:'shoulder_rotation',note:'External rotation. Elbow fixed at 90° at side. Slow and controlled.',i:null},
+   ],
+   hiit:{name:'HIIT Strength',color:'#C4A96B',finisher:'🔥 Finish: 10 min MAX incline fast walk',moves:[
+    {name:'Push-ups / Burpees',t:'3 × 12',k:'hiit_pushup_burpee',note:null,i:null},
+    {name:'Plank',t:'3 × 45s',k:'hiit_plank',note:null,i:null},
+    {name:'Mountain Climbers',t:'3 × 40s on / 20s off',k:'hiit_mnt_climbers',note:null,i:null},
+    {name:'Weighted Wall Sit',t:'3 × 45s',k:'hiit_wall_sit',note:'Hold weight on thighs',i:null},
+    {name:'Jumping Jacks',t:'3 × 40s on / 20s off',k:'hiit_jumping_jacks',note:null,i:null},
+   ]}},
+  {day:'Saturday',short:'Sat',muscle:'Triceps',color:'#9E7A9E',rest:false,
+   cardio:{icon:'🏃',name:'10 min cardio',note:'Your choice. Target 120+ BPM'},
+   exercises:[
+    {name:'Overhead DB Extension',sets:'3 × 8–12',k:'db_overhead_ext',note:'One or two hands. Seated or lying on bench. Full stretch at bottom.',i:'shoulder_press'},
+    {name:'Z-Bar Skull Crusher',sets:'3 × 8–12',k:'zbar_tricep',note:'Lying on bench. Lower bar toward forehead. Elbows fixed.',i:null},
+    {name:'Cable Rope Pushdown',sets:'3 × 8–12',k:'cable_rope_pushdown',note:'Elbows pinned to sides. Fully extend. Split rope at bottom.',i:'cable_row'},
+    {name:'DB Kickback',sets:'3 × 8–12',k:'db_kickback',note:'Hinge forward, upper arm parallel to floor. Extend fully back.',i:null},
+    {name:'Dips',sets:'3 × 8–12',k:'dips',note:'Upright torso = triceps focus. Slow down, controlled up.',i:null},
+   ],
+   hiit:{name:'HIIT Core',color:'#9E7A9E',moves:[
+    {name:'Abs — crunches / sit-ups',t:'3 × 12–15',k:'hiit_abs',note:null,i:null},
+    {name:'Leg Raises',t:'3 × 12',k:'hiit_leg_raises',note:null,i:null},
+    {name:'Dumbbell Side Bend',t:'3 × 12 each side',k:'hiit_side_bend',note:'Lower body laterally, weight in one hand.',i:'hiit_side_bend'},
+    {name:'Weighted Russian Twist',t:'3 × 12',k:'hiit_russian',note:'Standing, defensive basketball stance.',i:null},
+    {name:'Front Raise — defensive stance',t:'3 × 12',k:'hiit_front_raise_def',note:'Basketball defensive position.',i:null},
+    {name:'Hanging Leg Raises',t:'3 × 10–12',k:'hiit_hanging_leg',note:null,i:null},
+   ]}},
+  {day:'Sunday',short:'Sun',muscle:'Rest',color:'#B0A898',rest:true}
 ];
 
-function getDoneKey(dayIndex, exIndex) {
-  return `vmw_done_${dayIndex}_${exIndex}`;
-}
+function kcalPerSet(k){return KCAL[k]||5;}
+function totalKcal(di){const d=DAYS[di];if(d.rest)return 0;let t=60;d.exercises.forEach(e=>t+=kcalPerSet(e.k)*3);if(d.hiit)d.hiit.moves.forEach(m=>t+=kcalPerSet(m.k)*3);return t;}
+function earnedKcal(di){const d=DAYS[di];if(d.rest)return 60;let t=60;d.exercises.forEach((e,i)=>{if(ls(`ex_${di}_${i}`))t+=kcalPerSet(e.k)*3;});if(d.hiit)d.hiit.moves.forEach((m,i)=>{if(ls(`ht_${di}_${i}`))t+=kcalPerSet(m.k)*3;});return t;}
+function prog(di){const d=DAYS[di];if(!d.exercises)return{done:0,total:0};let done=0,total=d.exercises.length+(d.hiit?d.hiit.moves.length:0);d.exercises.forEach((_,i)=>{if(ls(`ex_${di}_${i}`))done++;});if(d.hiit)d.hiit.moves.forEach((_,i)=>{if(ls(`ht_${di}_${i}`))done++;});return{done,total};}
+function ls(k){return localStorage.getItem('vmw3_'+k)==='1';}
+function toggle(k){ls(k)?localStorage.removeItem('vmw3_'+k):localStorage.setItem('vmw3_'+k,'1');}
 
-function getProgress(dayIndex) {
-  const day = DAYS[dayIndex];
-  if (!day.exercises) return 0;
-  const done = day.exercises.filter((_, i) => localStorage.getItem(getDoneKey(dayIndex, i)) === '1').length;
-  return done;
-}
-
-function buildHome() {
-  const strip = document.getElementById('weekStrip');
-  const cards = document.getElementById('dayCards');
-  strip.innerHTML = '';
-  cards.innerHTML = '';
-
-  DAYS.forEach((d, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'week-dot';
-    const progress = d.exercises ? getProgress(i) : 0;
-    const total = d.exercises ? d.exercises.length : 0;
-    const allDone = total > 0 && progress === total;
-    dot.innerHTML = `
-      <div class="week-dot-circle" style="background:${allDone ? d.color : d.color+'22'};border-color:${d.color};color:${allDone ? '#fff' : d.color}">
-        ${allDone ? '✓' : d.short.substring(0,2)}
-      </div>
-      <div class="week-dot-label">${d.short}</div>
-    `;
-    dot.onclick = () => openDay(i);
-    strip.appendChild(dot);
-
-    const card = document.createElement('div');
-    card.className = 'day-card animate-in';
-    card.innerHTML = `
-      <div class="day-card-header">
-        <div class="day-color-bar" style="background:${d.color}"></div>
-        <div class="day-card-info">
-          <div class="day-card-day">${d.day}</div>
-          <div class="day-card-name" style="color:${d.color}">${d.muscle}</div>
-          <div class="day-card-meta">${d.rest ? 'Rest & recover' : d.subtitle}</div>
-        </div>
-        <div class="day-card-arrow" style="color:${d.color}">›</div>
-      </div>
-      ${!d.rest && total > 0 ? `
-      <div style="padding: 0 16px 14px;">
-        <div class="progress-bar-row">
-          <span>${progress}/${total} exercises</span>
-          <span>${Math.round(progress/total*100)}%</span>
-        </div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" style="width:${progress/total*100}%;background:${d.color}"></div>
-        </div>
-      </div>` : ''}
-    `;
-    card.onclick = () => openDay(i);
-    cards.appendChild(card);
+function buildHome(){
+  const strip=document.getElementById('weekStrip'),cards=document.getElementById('dayCards');
+  strip.innerHTML='';cards.innerHTML='';
+  DAYS.forEach((d,i)=>{
+    const p=prog(i),allDone=p.total>0&&p.done===p.total;
+    const dot=document.createElement('div');dot.className='week-dot';
+    dot.innerHTML=`<div class="week-dot-circle" style="background:${allDone?d.color:d.color+'22'};border-color:${d.color};color:${allDone?'#fff':d.color}">${allDone?'✓':d.short.substring(0,2)}</div><div class="week-dot-label">${d.short}</div>`;
+    dot.onclick=()=>openDay(i);strip.appendChild(dot);
+    const card=document.createElement('div');card.className='day-card';
+    const ke=earnedKcal(i),kt=totalKcal(i);
+    card.innerHTML=`<div class="day-card-inner"><div class="day-card-accent" style="background:${d.color}22;color:${d.color}">${d.short.toUpperCase()}</div><div class="day-card-info"><div class="day-card-day">${d.day}</div><div class="day-card-muscle" style="color:${d.color}">${d.muscle}</div><div class="day-card-sub">${d.rest?'Rest & recover':(d.exercises?d.exercises.length+' exercises + HIIT':'')}</div></div><div class="day-card-right"><div class="day-card-arrow" style="color:${d.color}">›</div>${!d.rest?`<div class="day-card-kcal" style="color:${d.color}">${ke>60?ke+'/':''}${kt} kcal</div>`:''}</div></div>${!d.rest&&p.total>0?`<div class="progress-wrap"><div class="progress-meta"><span>${p.done}/${p.total} sets done</span><span>${Math.round(p.done/p.total*100)}%</span></div><div class="progress-bg"><div class="progress-fill" style="width:${p.done/p.total*100}%;background:${d.color}"></div></div></div>`:''}`;
+    card.onclick=()=>openDay(i);cards.appendChild(card);
   });
 }
 
-function openDay(i) {
-  const d = DAYS[i];
-  document.getElementById('detailDayLabel').textContent = d.day;
-  document.getElementById('detailTitle').textContent = d.muscle;
-  document.getElementById('detailTitle').style.color = d.color;
-  document.getElementById('detailSubtitle').textContent = d.subtitle;
-  document.getElementById('detailHero').style.background = d.color + '18';
-
-  const body = document.getElementById('detailBody');
-  body.innerHTML = '';
-
-  if (d.rest) {
-    body.innerHTML = `
-      <div class="rest-card">
-        <div class="rest-emoji">🛌</div>
-        <div class="rest-title">Rest Day</div>
-        <div class="rest-text">Full recovery. Walk, stretch, eat well, sleep well.<br>Your muscles grow when you rest, not when you train.</div>
-      </div>
-    `;
-  } else {
-    const warmup = d.warmupNote || '30 min incline walk or run';
-
-    body.innerHTML += `
-      <div class="section-title">Cardio warmup</div>
-      <div class="warmup-card">
-        <div class="warmup-icon">🏃</div>
-        <div class="warmup-text">
-          <strong>${warmup.includes('walk only') ? 'Incline walk' : 'Incline walk or run'}</strong>
-          <span>${warmup}</span>
-        </div>
-      </div>
-
-      <div class="section-title">Rules</div>
-      <div class="rules-strip">
-        <div class="rule-pill"><div class="rule-val" style="color:${d.color}">18–20</div><div class="rule-lbl">reps per set</div></div>
-        <div class="rule-pill"><div class="rule-val" style="color:${d.color}">4</div><div class="rule-lbl">sets each</div></div>
-        <div class="rule-pill"><div class="rule-val" style="color:${d.color}">60s</div><div class="rule-lbl">max rest</div></div>
-      </div>
-
-      <div class="section-title">${d.muscle} — ${d.exercises.length} exercises</div>
-      <div class="exercise-list" id="exList"></div>
-
-      <div class="section-title">Full-body HIIT — core focus</div>
-      <div class="hiit-card">
-        <div class="hiit-header">
-          <strong>Circuit</strong>
-          <span class="hiit-badge">${d.hiit.duration}</span>
-        </div>
-        ${d.hiit.moves.map(m => `
-          <div class="hiit-row">
-            <span>${m.name}</span>
-            <div class="hiit-timing">${m.timing}</div>
-          </div>
-        `).join('')}
-        <div class="hiit-note">${d.hiit.note}</div>
-      </div>
-      <div style="height: 32px;"></div>
-    `;
-
-    const exList = document.getElementById('exList');
-    d.exercises.forEach((ex, j) => {
-      const isDone = localStorage.getItem(getDoneKey(i, j)) === '1';
-      const item = document.createElement('div');
-      item.className = 'exercise-item' + (isDone ? ' done' : '');
-      item.innerHTML = `
-        <div class="ex-num" style="color:${d.color}">${j+1}</div>
-        <div class="ex-info">
-          <div class="ex-name">${ex.name}</div>
-          <div class="ex-sets">${ex.sets}</div>
-        </div>
-      `;
-      item.onclick = () => {
-        const key = getDoneKey(i, j);
-        const now = localStorage.getItem(key) === '1';
-        if (now) { localStorage.removeItem(key); item.classList.remove('done'); }
-        else { localStorage.setItem(key, '1'); item.classList.add('done'); }
-        buildHome();
-      };
-      exList.appendChild(item);
-    });
-  }
-
-  document.getElementById('splash').style.display = 'none';
-  const det = document.getElementById('detail');
-  det.classList.add('active');
-  det.scrollTop = 0;
+let curDay=0;
+function openDay(i){
+  curDay=i;const d=DAYS[i];
+  document.getElementById('dEyebrow').textContent=d.day;
+  const t=document.getElementById('dTitle');t.textContent=d.muscle;t.style.color=d.color;
+  updateDetailHeader(i);
+  renderBody(i);
+  document.getElementById('splash').style.display='none';
+  const det=document.getElementById('detail');det.classList.add('active');det.scrollTop=0;
 }
 
-function goHome() {
+function updateDetailHeader(i){
+  const d=DAYS[i];
+  if(d.rest){document.getElementById('dStats').innerHTML='';document.getElementById('dKcalBar').innerHTML='';return;}
+  const p=prog(i),ke=earnedKcal(i),kt=totalKcal(i);
+  document.getElementById('dStats').innerHTML=`<div><div class="stat-val" style="color:${d.color}">${d.exercises.length}</div><div class="stat-lbl">Exercises</div></div><div><div class="stat-val" style="color:${d.color}">${p.done}/${p.total}</div><div class="stat-lbl">Sets done</div></div><div><div class="stat-val" style="color:${d.color}">${ke}</div><div class="stat-lbl">Kcal</div></div>`;
+  document.getElementById('dKcalBar').innerHTML=`<div class="kcal-bar-meta"><span>Calories burned</span><span>${ke} / ${kt} kcal</span></div><div class="kcal-bar-bg"><div class="kcal-bar-fill" style="width:${Math.min(ke/kt*100,100)}%;background:${d.color}"></div></div>`;
+}
+
+function renderBody(i){
+  const d=DAYS[i],body=document.getElementById('detailBody');
+  body.innerHTML='';
+  if(d.rest){body.innerHTML=`<div class="rest-wrap"><svg width="110" height="110" viewBox="0 0 110 110"><circle cx="55" cy="55" r="50" fill="${d.color}18" stroke="${d.color}" stroke-width="1.5"/><text x="55" y="50" font-family="Barlow Condensed" font-size="28" font-weight="900" fill="${d.color}" text-anchor="middle">ZZZ</text><text x="55" y="72" font-family="Barlow Condensed" font-size="12" font-weight="700" fill="${d.color}" text-anchor="middle" letter-spacing="1">REST DAY</text></svg><div class="rest-title">Sunday</div><div class="rest-text">Full recovery. Walk, stretch, eat well, sleep well.<br>Muscles grow when you rest — not when you train.</div></div>`;return;}
+  body.innerHTML+=`<div class="sec-label">Cardio Warmup</div><div class="cardio-card"><div class="cardio-icon" style="background:${d.color}18">${d.cardio.icon}</div><div class="cardio-info"><strong>${d.cardio.name}</strong><span>${d.cardio.note}</span></div></div>`;
+  body.innerHTML+=`<div class="sec-label">Session Rules</div><div class="rules-row"><div class="rule-pill"><div class="rule-val" style="color:${d.color}">3</div><div class="rule-lbl">Sets</div></div><div class="rule-pill"><div class="rule-val" style="color:${d.color}">8–12</div><div class="rule-lbl">Reps</div></div><div class="rule-pill"><div class="rule-val" style="color:${d.color}">Failure</div><div class="rule-lbl">Target</div></div></div>`;
+  body.innerHTML+=`<div class="sec-label">${d.muscle} — ${d.exercises.length} Exercises</div><div class="ex-list" id="exL_${i}"></div>`;
+  if(d.hiit){body.innerHTML+=`<div class="sec-label">HIIT — ${d.hiit.name}</div><div class="hiit-card"><div class="hiit-hdr"><div class="hiit-hdr-title">${d.hiit.name}</div><div class="hiit-badge">3 Sets Each</div></div><div id="hiitL_${i}"></div>${d.hiit.finisher?`<div class="finisher">${d.hiit.finisher}</div>`:''}</div>`;}
+  body.innerHTML+='<div class="spacer"></div>';
+  setTimeout(()=>{
+    const el=document.getElementById(`exL_${i}`);
+    if(el)d.exercises.forEach((ex,j)=>{
+      const done=ls(`ex_${i}_${j}`);
+      const svg=ILLUS[ex.i]||SVG_STANDING;
+      const c=document.createElement('div');c.className='ex-card'+(done?' done':'');c.id=`ec_${i}_${j}`;
+      c.innerHTML=`<div class="ex-card-top" onclick="tapEx(${i},${j})"><div class="ex-num">${j+1}</div><div class="ex-info"><div class="ex-name">${ex.name}</div><div class="ex-meta"><span class="ex-tag">${ex.sets}</span><span class="ex-kcal" style="color:${d.color}">~${kcalPerSet(ex.k)*3} kcal</span></div></div><div class="ex-check">${done?'✓':''}</div></div><div class="ex-illus" id="il_${i}_${j}">${svg}${ex.note?`<div class="ex-note">${ex.note}</div>`:''}</div>`;
+      el.appendChild(c);
+    });
+    const hl=document.getElementById(`hiitL_${i}`);
+    if(hl&&d.hiit)d.hiit.moves.forEach((m,k)=>{
+      const done=ls(`ht_${i}_${k}`);
+      const r=document.createElement('div');r.className='hiit-move'+(done?' done':'');r.id=`hm_${i}_${k}`;
+      r.innerHTML=`<div class="hiit-move-l"><div class="hiit-dot" style="background:${d.hiit.color}"></div><div><div class="hiit-name">${m.name}</div>${m.note?`<div class="hiit-sub">${m.note}</div>`:''}</div></div><div class="hiit-timing">${m.t}<br><span class="hiit-kcal" style="color:${d.hiit.color}">~${kcalPerSet(m.k)*3} kcal</span></div>`;
+      r.onclick=()=>{toggle(`ht_${i}_${k}`);r.classList.toggle('done');updateDetailHeader(i);buildHome();};
+      hl.appendChild(r);
+    });
+  },0);
+}
+
+function tapEx(di,j){
+  toggle(`ex_${di}_${j}`);
+  const card=document.getElementById(`ec_${di}_${j}`);
+  if(!card)return;
+  card.classList.toggle('done');
+  const chk=card.querySelector('.ex-check');if(chk)chk.textContent=ls(`ex_${di}_${j}`)?'✓':'';
+  const il=document.getElementById(`il_${di}_${j}`);
+  if(il&&!ls(`ex_${di}_${j}`))il.classList.toggle('open');
+  updateDetailHeader(di);buildHome();
+}
+
+function goHome(){
   document.getElementById('detail').classList.remove('active');
-  document.getElementById('splash').style.display = 'flex';
+  document.getElementById('splash').style.display='flex';
   buildHome();
 }
 
 buildHome();
 </script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
-</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');</script>
 </body>
 </html>
